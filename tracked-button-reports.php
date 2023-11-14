@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name:       Tracked Button Reports
+ * Plugin Name:       Tracked Button CLI Reports
  * Description:       Este plugin implementa comandos para WP CLI, disponibilizando a exibição de dados armazenados no related plugin Tracked Button
  * Version:           0.0.1
  * Requires at least: 5.6
  * Author:            André F. Vigarani
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * License:           GPL v3 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain:       tracked-button-reports
  *
  * @package         Tracked_Button-Reports
