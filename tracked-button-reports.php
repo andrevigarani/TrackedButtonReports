@@ -19,7 +19,8 @@ class Tracked_Button_Reports {
     public function __construct() {
         // Adiciona o comando WP-CLI
         if (defined('WP_CLI') && WP_CLI) {
-            WP_CLI::add_command('listar_cliques', array($this, 'listClicks'));
+            WP_CLI::add_command('tb_listar_cliques', array($this, 'listClicks'));
+            WP_CLI::add_command('tb_total_cliques', array($this, 'listTotalClicks'));
         }
     }
 
@@ -46,6 +47,37 @@ class Tracked_Button_Reports {
             WP_CLI::success("Cliques Registrados:");
             foreach ($results as $data) {
                 WP_CLI::line("Botão ID: {$data->button_id}, Data e Hora: {$data->click_datetime}");
+            }
+        } else {
+            WP_CLI::warning("Nenhum clique registrado.");
+        }
+    }
+
+
+    public function listTotalClicks($args, $assoc_args) {
+        global $wpdb;
+
+        // Obtém o ID do botão do argumento passado
+        $button_id = isset($args[0]) ? $args[0] : '';
+
+        $table_name = $wpdb->prefix . 'tracked_clicks';
+
+        // Constrói a consulta SQL com base no ID do botão, se fornecido
+        $sql = "SELECT button_id, count(*) as total FROM $table_name";
+        if (!empty($button_id)) {
+            $sql .= " WHERE button_id = %s";
+            $sql = $wpdb->prepare($sql, $button_id);
+        }
+        $sql .= " GROUP BY 1";
+
+        // Obtém os cliques registrados no banco de dados
+        $results = $wpdb->get_results($sql);
+
+        // Exibe os resultados no console
+        if ($results) {
+            WP_CLI::success("Total de Cliques Registrados:");
+            foreach ($results as $data) {
+                WP_CLI::line("Botão ID: {$data->button_id}, Total: {$data->total}");
             }
         } else {
             WP_CLI::warning("Nenhum clique registrado.");
